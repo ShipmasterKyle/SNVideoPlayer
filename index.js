@@ -1,34 +1,43 @@
-class NitroBlock {
-    getInfo() {
-        return {
-            "id": "NitroBlock",
-            "name": "NitroBlock",
-            "blocks": [{
-                    "opcode": "substringy",
-                    "blockType": "reporter",
-                    "text": "letters [num1] through [num2] of [string]",
-                    "arguments": {
-                        "num1": {
-                            "type": "number",
-                            "defaultValue": "2"
-                        },
-                        "num2": {
-                            "type": "number",
-                            "defaultValue": "5"
-                        },
-                        "string": {
-                            "type": "string",
-                            "defaultValue": "hello world"
-                        }
-                    }
-                },
-            }],
-        "menus": { //we will get back to this in a later tutorial
-        }
+(function(ext) {
+    // Cleanup function when the extension is unloaded
+    ext._shutdown = function() {};
+ 
+    // Status reporting code
+    // Use this to report missing hardware, plugin or unsupported browser
+    ext._getStatus = function() {
+        return {status: 2, msg: 'Ready'};
     };
-    substringy({num1, num2, string}) {
-        return string.substring(num1 - 1, num2);
-    };
+ext.playaudiofromyoutube = function(videoid,starttime,endtime){
+function createFrame(vid,start,end) {
+        var ifrm = document.createElement("iframe");
+ifrm.width = 0;
+ifrm.id = "youtube"
+        ifrm.height = 0;
+ifrm.src="https://www.youtube.com/embed/"+ vid +"?start="+start+"&end="+end+";autoplay=true"
+        ifrm.frameBorder="0"
+        ifrm.allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        document.body.appendChild(ifrm);
+    }
+        createFrame(videoid,starttime,endtime)
+};
+ext.stopyoutubeaudio = function(){
+function removeElement(elementId) {
+    var getelement = document.getElementById(elementId);
+    getelement.parentNode.removeChild(getelement);
 }
-
-Scratch.extensions.register(new NitroBlock());
+removeElement("youtube")
+};
+ 
+ 
+    // Block and block menu descriptions
+    var descriptor = {
+        blocks: [
+[' ','play audio from youtube video ID: %s start time: %n end time: %n','playaudiofromyoutube'],
+[' ','stop youtube audio','stopyoutubeaudio'],
+        ],
+        url: 'https://boomerscratch.github.io/javascripts/youtubeaudioextensiondocumentation.mp4'
+    };
+ 
+    // Register the extension
+    ScratchExtensions.register('Youtube audio', descriptor, ext);
+})({});
